@@ -284,6 +284,24 @@ switch ($_REQUEST["action"]) {
     return; // return early so we don't show the stuff that follows
 
     break;
+
+    case "update_all_users_map_coordinates":
+        //print urlencode($_REQUEST["address"]);
+        $endpoint = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($_REQUEST["address"]) . "&sensor=false";
+        $address = curl_get($endpoint);
+        //print $address;
+        $output = json_decode($address);
+        //print $output->results[0]->geometry->location->lat;
+        $lat = $output->results[0]->geometry->location->lat;
+        $long = $output->results[0]->geometry->location->lng;
+        $coords = $lat . "," . $long;
+
+        print $coords;
+
+        //print $address;
+        return; // return early so we don't show the stuff that follows
+
+        break;
 } // End Action loop
 // Now generate results, $extra_q set in action loop above
 $q = "SELECT s.subject_id, subject, fname, lname, st.staff_id, type, shortform, s.active
